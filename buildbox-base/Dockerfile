@@ -1,4 +1,4 @@
-FROM yren:kiwi-baselayout:0.1
+FROM yren/kiwi-baselayout:0.1
 MAINTAINER Yufei <renyufei@gmail.com>
 
 ENV JAVA_VERSION=8u66 \
