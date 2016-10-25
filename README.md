@@ -12,7 +12,7 @@ docker push yren/kiwi-buildbox-base:0.1
 
 ### build box
 ```
-docker build --rm -t yren/build-box .
-docker tag yren/build-box yren/build-box:0.1
-docker push yren/build-box:0.1
+docker build --rm -t yren/kiwi-buildbox .
+docker tag yren/kiwi-buildbox yren/kiwi-buildbox:0.1
+docker push yren/kiwi-buildbox:0.1
 ```
