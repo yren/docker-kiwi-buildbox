@@ -9,6 +9,7 @@ source /rt/toolkit/utils.sh
 project=$1
 tag=$2
 buildDependence=$3
+echo "docker email $DOCKER_EMAIL, $env_DOCKER_EMAIL"
 
 if [ $# -lt 3 ]; then
     echo "Usage: $0 project tag [true|false]"
