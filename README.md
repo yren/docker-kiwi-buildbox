@@ -16,3 +16,6 @@ docker build --rm -t yren/kiwi-buildbox .
 docker tag yren/kiwi-buildbox yren/kiwi-buildbox:0.1
 docker push yren/kiwi-buildbox:0.1
 ```
+
+### github contents
+* https://github.com/yren/docker-kiwi-jenkins/archive/0.3.zip

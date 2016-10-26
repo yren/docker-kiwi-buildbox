@@ -3,7 +3,7 @@ set -x
 dockerrepo="yren"
 buildhome="/rt/build"
 dockerBuildArg="--build-arg http_proxy=$http_proxy --build-arg https_proxy=$https_proxy"
-gitAddr="https://github.com/yren/"
+gitAddr="https://github.com/yren"
 #####################################################################################
 #$1 git project
 #$2 git branch, docker image tag
@@ -14,14 +14,16 @@ build(){
   fromDir=$PWD
   echo "cd $buildhome"
   cd $buildhome
-  projectName=$(completePIName $1)
-  git archive -v --format=tar --prefix=$projectName/ --remote=$gitAddr:$projectName.git $2  | tar x
-  cd $buildhome/$projectName
+  projectName=$1
+  branch=$2
+  wget ${gitAddr}/${projectName}/archive/${branch}.zip -O ${projectName}.zip \
+    && uzip -o ${projectName}.zip && rm -rf ${projectName}.zip
+  cd $buildhome/$projectName-${branch}
   if [ -f "build.sh" ]; then
     shift # cut $1
     ./build.sh $@
   elif [ -f "pom.xml.m4" ]; then
-    m4 -D__VERSION__=$2 pom.xml.m4 > pom.xml
+    m4 -D__VERSION__=$branch pom.xml.m4 > pom.xml
     mvn clean deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
   else
     echo "No build.sh nor pom.xml.m4 found under $projectName, skip!"
@@ -32,25 +34,26 @@ build(){
 
 buildImage(){
   fromDir=$PWD
-  projectName=$(completePIName $1)
-  echo "cd $buildhome/$projectName"
-  cd $buildhome/$projectName
+  projectName=$1
+  branch=$2
+  echo "cd $buildhome/${projectName}-${branch}"
+  cd $buildhome/${projectName}-${branch}
   if [ -f "buildImage.sh" ]; then
     shift # cut $1
     ./buildImage.sh $@
   elif [ -f "Dockerfile" ]; then
     echo
     echo "**********************************************************************"
-    echo "* docker build $projectName:$2 "
+    echo "* docker build $projectName:$branch "
     echo "**********************************************************************"
     echo
-    docker build $dockerBuildArg --rm -t $dockerrepo/$projectName:$2 .
+    docker build $dockerBuildArg --rm -t $dockerrepo/$projectName:$branch .
     echo
     echo "**********************************************************************"
-    echo "* docker push  $projectName:$2 "
+    echo "* docker push  $projectName:$branch "
     echo "**********************************************************************"
     echo
-    docker push $dockerrepo/$projectName:$2
+    docker push $dockerrepo/$projectName:$branch
   else
     echo "Error: No buildImage.sh nor Dockerfile found under $projectName, please check!"
     exit 1
@@ -65,16 +68,5 @@ buildImage(){
 #####################################################################################
 
 pullImageFromDockerHub(){
-  docker pull $dockerrepo/$(completePIName $1):$2
-}
-
-#####################################################################################
-#$1 git project / docker image name
-#####################################################################################
-completePIName(){
-  PIName=$1
-  if ! [[ $1 == *"/"* ]]; then
-    PIName=yren/$1
-  fi
-  echo $PIName
+  docker pull $dockerrepo/$1:$2
 }
