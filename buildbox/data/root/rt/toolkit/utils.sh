@@ -70,3 +70,8 @@ buildImage(){
 pullImageFromDockerHub(){
   docker pull $dockerrepo/$1:$2
 }
+
+pushImageToDockerHub() {
+  docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  docker pull $dockerrepo/$1:$2
+}
