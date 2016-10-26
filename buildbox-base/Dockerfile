@@ -8,6 +8,7 @@ ENV JAVA_VERSION=8u66 \
     JAVA_HOME=/usr/java/latest
 
 COPY data/root/* /
+ADD target/data/docker/* /usr/bin/
 
 RUN set -x; \
     yum -y groupinstall 'Development Tools' \
