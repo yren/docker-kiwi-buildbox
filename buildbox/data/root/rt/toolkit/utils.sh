@@ -17,7 +17,7 @@ build(){
   projectName=$1
   branch=$2
   wget ${gitAddr}/${projectName}/archive/${branch}.zip -O ${projectName}.zip \
-    && uzip -o ${projectName}.zip && rm -rf ${projectName}.zip
+    && unzip -o ${projectName}.zip && rm -rf ${projectName}.zip
   cd $buildhome/$projectName-${branch}
   if [ -f "build.sh" ]; then
     shift # cut $1
