@@ -13,6 +13,7 @@ RUN set -x; \
     yum -y groupinstall 'Development Tools' \
     && curl -fSLk --header "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/$JAVA_VERSION-$JAVA_BUILD_VERSION/jdk-$JAVA_VERSION-linux-x64.rpm" -o /tmp/jdk.rpm \
     && yum -y install docker-engine \
+    && yum -y install wget \
     && yum -y install /tmp/jdk.rpm \
     && alternatives --install /usr/bin/java java /usr/java/latest/bin/java 200000 \
     && alternatives --install /usr/bin/jar jar /usr/java/latest/bin/jar 200000 \
