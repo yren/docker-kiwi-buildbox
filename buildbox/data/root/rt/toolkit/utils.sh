@@ -73,5 +73,5 @@ pullImageFromDockerHub(){
 
 pushImageToDockerHub() {
   docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-  docker pull $dockerrepo/$1:$2
+  docker push $dockerrepo/$1:$2
 }
